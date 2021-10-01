@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PDFDemo.Views.ProductListView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:PDFDemo.ViewModels">
+
+    <ContentPage.BindingContext>
+        <vm:ProductListViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout Margin="10">
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                VerticalOptions="Center" />
+
+            <CollectionView
+                ItemsSource="{Binding ProductCollection}"
+                SelectedItem="{Binding SelectedProduct}"
+                SelectionMode="Single">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        HorizontalItemSpacing="10"
+                        Orientation="Vertical"
+                        Span="3"
+                        VerticalItemSpacing="20" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame
+                            Padding="5"
+                            BorderColor="Gray"
+                            CornerRadius="15"
+                            HasShadow="True"
+                            HeightRequest="175"
+                            HorizontalOptions="Start"
+                            IsClippedToBounds="True"
+                            WidthRequest="200">
+                            <Grid RowDefinitions="Auto,75,*,Auto" RowSpacing="0">
+
+                                <Frame
+                                    Grid.Row="0"
+                                    Margin="3"
+                                    Padding="0"
+                                    BackgroundColor="Green"
+                                    BorderColor="Green"
+                                    CornerRadius="5"
+                                    HasShadow="False"
+                                    HorizontalOptions="Center"
+                                    IsClippedToBounds="True"
+                                    WidthRequest="200">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="Small"
+                                        HorizontalOptions="Center"
+                                        Text="  NEW  "
+                                        TextColor="#FAE072"
+                                        VerticalOptions="Center" />
+                                </Frame>
+
+                                <Image
+                                    Grid.Row="1"
+                                    Margin="3"
+                                    Aspect="AspectFill"
+                                    Source="{Binding PictureUrl}" />
+
+                                <Label
+                                    Grid.Row="2"
+                                    FontSize="Medium"
+                                    HorizontalOptions="Center"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding Name}"
+                                    TextColor="DarkBlue"
+                                    VerticalOptions="Center" />
+
+                                <Label
+                                    Grid.Row="3"
+                                    Margin="3"
+                                    FontSize="Small"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding OriginalPrice, StringFormat='{0:C2}'}"
+                                    TextColor="ForestGreen" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button
+                BackgroundColor="Green"
+                Command="{Binding PrintPdfCommand}"
+                CornerRadius="15"
+                Text="Print Pdf"
+                TextColor="White" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
