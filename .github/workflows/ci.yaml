@@ -67,7 +67,7 @@ jobs:
 #        run: MSBuild /t:Build /p:Configuration=Release /p:Platform=iPhone /p:BuildIpa=true ./PDFDemo.iOS/PDFDemo.iOS.csproj
         
       - name: Build Android
-        run: MSBuild /t:SignAndroidPackage /p:Configuration=Release /p:AndroidPackageFormat=apk /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=icebeamkeystore /p:AndroidSigningKeyPass=${{ secrets.DECRYPT_KEY }} /p:AndroidSigningKeyStore=./PDFDemo/PDFDemo.Android/icebeamkeystore.jks /p:AndroidSigningStorePass=${{ secrets.DECRYPT_KEY }} ./PDFDemo/PDFDemo.Android/PDFDemo.Android.csproj
+        run: MSBuild /t:SignAndroidPackage /p:Configuration=Release /p:AndroidPackageFormat=apk /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=icebeamkeystore /p:AndroidSigningKeyPass=${{ secrets.DECRYPT_KEY }} /p:AndroidSigningKeyStore=icebeamkeystore.jks /p:AndroidSigningStorePass=${{ secrets.DECRYPT_KEY }} ./PDFDemo/PDFDemo.Android/PDFDemo.Android.csproj
         
       - name: Setup App Center CLI
         run: npm install -g appcenter-cli
