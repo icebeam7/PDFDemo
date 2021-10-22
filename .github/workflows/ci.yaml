@@ -55,7 +55,7 @@ jobs:
       - name: Set Android version
         uses: damienaicheh/update-android-version-manifest-action@v1.0.0
         with:
-          android-manifest-path: ./PDFDemo.Android/Properties/AndroidManifest.xml
+          android-manifest-path: ./PDFDemo/PDFDemo.Android/Properties/AndroidManifest.xml
           version-name: ${{ secrets.APP_VERSION }}
           version-code: ${{ github.run_number }}
           print-file: true
