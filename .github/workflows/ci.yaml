@@ -40,7 +40,8 @@ jobs:
 #          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
 
       - name: Setup Android signing
-        run: (echo ${{ secrets.KEYSTORE }} | base64 --decode) > ./PDFDemo/PDFDemo.Android/icebeamkeystore.keystore.asc
+#        run: (echo ${{ secrets.KEYSTORE }} | base64 --decode) > ./PDFDemo/PDFDemo.Android/icebeamkeystore.keystore.asc
+        run: (echo ${{ secrets.KEYSTORE }} | base64 --decode) > ./PDFDemo.Android/icebeamkeystore.keystore.asc
         
 #      - name: Set iOS version
 #        run: |
