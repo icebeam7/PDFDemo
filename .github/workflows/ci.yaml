@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+#      - name: Decrypt Secrets
+#        run: ./secrets/decrypt_secrets.sh
+#        env:
+#          DECRYPT_KEY: ${{ secrets.DECRYPT_KEY }}
+
+#      - name: Setup iOS Certificates
+#        uses: apple-actions/import-codesign-certs@v1
+#        with: 
+#          p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
+#          p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+#          keychain: github-actions-xamarin
+#          keychain-password: ''
+
+#      - name: Setup iOS Provisioning Profiles
+#        uses: apple-actions/download-provisioning-profiles@v1
+#        with: 
+#          bundle-id: 'dev.sbyte.github-actions-xamarin'
+#          profile-type: 'IOS_APP_ADHOC'
+#          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+#          api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+#          api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+
+      - name: Setup Android signing
+        run: (echo ${{ secrets.KEYSTORE }} | base64 --decode) > ./PDFDemo.Android/keystore.jks
+        
+#      - name: Set iOS version
+#        run: |
+#          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${{ secrets.APP_VERSION }}" ./PDFDemo.iOS/Info.plist
+#          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${{ github.run_number }}" ./PDFDemo.iOS/Info.plist
+
+      - name: Set Android version
+        uses: damienaicheh/update-android-version-manifest-action@v1.0.0
+        with:
+          android-manifest-path: ./PDFDemo.Android/Properties/AndroidManifest.xml
+          version-name: ${{ secrets.APP_VERSION }}
+          version-code: ${{ github.run_number }}
+          print-file: true
+
+      - name: Restore NuGet packages
+        run: nuget restore
+
+#      - name: Build iOS
+#        run: MSBuild /t:Build /p:Configuration=Release /p:Platform=iPhone /p:BuildIpa=true ./PDFDemo.iOS/PDFDemo.iOS.csproj
+        
+      - name: Build Android
+        run: MSBuild /t:SignAndroidPackage /p:Configuration=Release /p:AndroidPackageFormat=apk /p:AndroidKeyStore=true /p:AndroidSigningKeyAlias=icebeamkeystore /p:AndroidSigningKeyPass=${{ secrets.DECRYPT_KEY }} /p:AndroidSigningKeyStore=keystore.jks /p:AndroidSigningStorePass=${{ secrets.DECRYPT_KEY }} ./PDFdemo.Android/PDFDemo.Android.csproj
+        
+      - name: Setup App Center CLI
+        run: npm install -g appcenter-cli
+        
+#      - name: Upload iOS app to App Center
+#        run: appcenter distribute release --silent --file ./PDFDemo.iOS/bin/iPhone/Release/PDFDemo.iOS.ipa --app SByteDev/PDFDemo.Xamarin-iOS --group Collaborators --token ${{ secrets.APP_CENTER_TOKEN }}
+          
+#      - name: Upload Android app to App Center
+#        run: appcenter distribute release --silent --file ./PDFDemo.Android/bin/Release/com.luisbeltran.icebeamkeystore-Signed.apk --app luisbeltran/PDFDemo.Xamarin-Android --group Collaborators --token ${{ secrets.APP_CENTER_TOKEN }}
