@@ -42,7 +42,7 @@ jobs:
       - name: Setup Android signing
         run: |   
            echo "${{ secrets.KEYSTORE }}" > icebeamkeystore.asc   
-           gpg -d --passphrase "${{ secrets.DECODE_KEY }}" --batch icebeamkeystore.asc > ./PDFDemo/PDFDemo.Android/icebeamkeystore.jks 
+           gpg -d --passphrase "${{ secrets.DECRYPT_KEY }}" --batch icebeamkeystore.asc > ./PDFDemo/PDFDemo.Android/icebeamkeystore.jks 
 
 #        run: (echo ${{ secrets.KEYSTORE }} | base64 --decode) > ./PDFDemo.Android/icebeamkeystore.keystore.asc
 
